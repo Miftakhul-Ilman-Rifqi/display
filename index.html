@@ -2,22 +2,42 @@
 <html>
 
 <head>
-    <title>Contoh Iframe</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Website Navbar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Menambahkan warna latar saat dihover */
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffc107;
+            /* Warna teks saat dihover */
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1 class="text-center">Contoh Iframe</h1>
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item"
-                src="https://script.google.com/macros/s/AKfycbyk8h_fPgFRI5lB09W4I7aXxIp1PVXexsqLFJ0KFxtlTiqy_rlX8ZX-BQ0F2IXyhCvj5g/exec"
-                frameborder="0"></iframe>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">DHJ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="plant-tambun.html">Plant Tambun</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Plant Setu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Plant Cileungsi</a>
+                </li>
+            </ul>
         </div>
-    </div>
+    </nav>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
