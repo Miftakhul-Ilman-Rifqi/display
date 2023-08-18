@@ -40,11 +40,51 @@
     <div class="container mt-4">
         <h1 class="text-center">Plant Tambun - PPC - Perolehan Hasil</h1>
         <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item"
+            <!-- <iframe class="embed-responsive-item"
                 src="https://script.google.com/macros/s/AKfycbyk8h_fPgFRI5lB09W4I7aXxIp1PVXexsqLFJ0KFxtlTiqy_rlX8ZX-BQ0F2IXyhCvj5g/exec"
-                frameborder="0"></iframe>
+                frameborder="0"></iframe> -->
+            <div id="spreadsheet-data" class="text-center"></div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            // Ganti dengan API key Anda
+            var apiKey = 'AIzaSyAmT4yC_4qq-C_x11d8wRoA18Hnuj29vhs';
+
+            // Ganti dengan ID Spreadsheet dan Range yang sesuai
+            var spreadsheetId = '1IL6KzH6ULJG0ZvPWq52V90F8nfs2EDDwSb0NVd6Ds2E';
+            var range = 'Sheet1!A1:G20'; // Misalnya
+
+            var url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+            $.get(url, function (data) {
+                var values = data.values;
+                var content = "<table class='table table-bordered'><thead><tr>";
+
+                // Membuat header tabel
+                for (var i = 0; i < values[0].length; i++) {
+                    content += "<th>" + values[0][i] + "</th>";
+                }
+
+                content += "</tr></thead><tbody>";
+
+                // Membuat baris-baris tabel
+                for (var i = 1; i < values.length; i++) {
+                    content += "<tr>";
+                    for (var j = 0; j < values[i].length; j++) {
+                        content += "<td>" + values[i][j] + "</td>";
+                    }
+                    content += "</tr>";
+                }
+
+                content += "</tbody></table>";
+
+                // Menampilkan tabel hasil dari spreadsheet
+                $("#spreadsheet-data").html(content);
+            });
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
