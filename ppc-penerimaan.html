@@ -2,60 +2,168 @@
 <html>
 
 <head>
-    <title>Google Sheets Data</title>
+    <title>Website Navbar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <style>
+        /* Menambahkan warna latar saat dihover */
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffc107;
+            /* Warna teks saat dihover */
+        }
+
+        /* CSS style for total cells */
+        .total-cell {
+            background-color: yellow;
+            color: black;
+        }
+
+        .embed-responsive-16by9 {
+            padding-bottom: 56.25%;
+        }
+
+        .embed-responsive-item {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Google Sheets Data</h1>
-    <div id="data"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">DHJ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="plant-tambun.html">Plant Tambun</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Plant Setu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Plant Cileungsi</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="text-center py-4">
+            <h1 class="display-4">Plant Tambun - PPC - Perolehan Hasil</h1>
+        </div>
+        <div id="data-container" class="table-responsive">
+            <table id="data-table" class="table table-bordered text-center"></table>
+        </div>
+        <div id="total-containerr" class="text-center py-4">
+            <h1 class="display-4">TOTAL</h1>
+        </div>
+        <div id="total-container" class="text-center py-4">
+            <h1 class="display-4"></h1>
+        </div>
+    </div>
 
     <script>
-        // Replace with your actual API key and spreadsheet ID
-        var apiKey = 'AIzaSyAmT4yC_4qq-C_x11d8wRoA18Hnuj29vhs';
-        var spreadsheetId = '1IL6KzH6ULJG0ZvPWq52V90F8nfs2EDDwSb0NVd6Ds2E';
-        var range = 'A1:G20';
+        // Load Google Sheets API
+        gapi.load('client', initClient);
 
-        // Authenticate and authorize using the API key
-        function loadClient() {
-            gapi.client.setApiKey(apiKey);
-            return gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')
-                .then(function () {
-                    console.log('GAPI client loaded for API');
-                }, function (error) {
-                    console.error('Error loading GAPI client for API', error);
-                });
-        }
-
-        // Fetch and display data from the Google Sheet
-        function fetchData() {
-            gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: spreadsheetId,
-                range: range
-            }).then(function (response) {
-                var data = response.result.values;
-                var dataDiv = document.getElementById('data');
-                var html = '<table>';
-                for (var i = 0; i < data.length; i++) {
-                    html += '<tr>';
-                    for (var j = 0; j < data[i].length; j++) {
-                        html += '<td>' + data[i][j] + '</td>';
-                    }
-                    html += '</tr>';
-                }
-                html += '</table>';
-                dataDiv.innerHTML = html;
-            }, function (error) {
-                console.error('Error fetching data', error);
+        // Initialize Google Sheets API client
+        function initClient() {
+            gapi.client.init({
+                apiKey: 'AIzaSyB7CtW0wTH9WwaWQuXq9lAYevvmbgl7IzY', // Ganti dengan API key Anda
+                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+            }).then(() => {
+                // Call a function to load and display data from the spreadsheet
+                loadData();
             });
         }
 
-        // Load the Google Sheets API and fetch data
-        gapi.load('client', function () {
-            loadClient().then(fetchData);
-        });
+        // Load and display data from the spreadsheet
+        function loadData() {
+            const spreadsheetId = '1IL6KzH6ULJG0ZvPWq52V90F8nfs2EDDwSb0NVd6Ds2E'; // Ganti dengan ID lembar kerja Anda
+            const range = 'Sheet1!A:A'; // Kolom "Nama" (kolom D)
+
+            // Call the Google Sheets API to get values from the specified range
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: spreadsheetId,
+                range: range,
+            }).then((response) => {
+                const result = response.result;
+                const values = result.values;
+
+                if (values && values.length > 0) {
+                    var table = document.getElementById('data-table');
+                    var headerRow = values[0]; // Menggunakan header langsung dari data
+                    var namaColumnIndex = headerRow.indexOf('Nama'); // Menemukan indeks kolom "Nama"
+
+                    // Create table header
+                    var tableHeader = "<thead><tr>";
+                    tableHeader += `<th>${headerRow[namaColumnIndex]}</th>`; // Hanya menampilkan kolom "Nama"
+                    tableHeader += "</tr></thead>";
+
+                    // Create table body
+                    var tableBody = "<tbody>";
+                    for (let i = 1; i < values.length; i++) {
+                        var rowData = values[i];
+                        tableBody += "<tr>";
+                        tableBody += `<td>${rowData[namaColumnIndex]}</td>`; // Hanya menampilkan data dari kolom "Nama"
+                        tableBody += "</tr>";
+                    }
+                    tableBody += "</tbody>";
+
+                    // Populate the table
+                    table.innerHTML = tableHeader + tableBody;
+
+                    // Calculate and display the sum of all values in the "Nama" column
+                    var totalContainer = document.getElementById('total-container');
+                    var totalSum = 0;
+                    for (let i = 1; i < values.length; i++) {
+                        const value = parseInt(values[i][namaColumnIndex]); // Assuming the data is numeric
+                        if (!isNaN(value)) {
+                            totalSum += value;
+                        }
+                    }
+                    totalContainer.innerHTML = `<p>Total:</p><p>${totalSum}</p>`;
+                } else {
+                    console.log('No data found.');
+                }
+            }, (response) => {
+                console.log('Error:', response.result.error.message);
+            });
+        }
+
+
+        // Batch get values from spreadsheet
+        function batchGetValues(spreadsheetId, ranges, callback) {
+            try {
+                gapi.client.sheets.spreadsheets.values.batchGet({
+                    spreadsheetId: spreadsheetId,
+                    ranges: ranges,
+                }).then((response) => {
+                    const result = response.result;
+                    console.log(`${result.valueRanges.length} ranges retrieved.`);
+                    if (callback) callback(response);
+                });
+            } catch (err) {
+                document.getElementById('content').innerText = err.message;
+                return;
+            }
+        }
     </script>
-    <script src="https://apis.google.com/js/api.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
